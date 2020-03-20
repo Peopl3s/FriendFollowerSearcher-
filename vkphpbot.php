@@ -4,6 +4,7 @@ ini_set('max_execution_time', 900);
 
 class VkFriendFollowerSearcher
 {
+	// TODO: Getting a token from an encrypted file on the server
        private $token = '*************';
        private $u_id;
 	
@@ -30,7 +31,7 @@ class VkFriendFollowerSearcher
 			$code = $this->get_vk_script_code_for_followers($followersCount, count($received_peoples));
 			$followes = $this->get_json_decoded_content($code);
 			$received_peoples = array_merge($received_peoples, $followes);
-			usleep(333);
+			usleep(333);   // The VK API allows up to three requests per second, so usleep(333333) sleep for (1/3) c;
 		}
 		return $this->get_result($received_peoples);
 	}
@@ -39,7 +40,7 @@ class VkFriendFollowerSearcher
 	{
 		$code = 'var followers =API.users.getFollowers({"user_id":"'.$this->u_id.'",  "v":"5.2", "count":1000}); '
 				.'var count = followers.count; return count;';
-				
+		// 1000 - max value of field "count"		
 		$countFollowers = (int)($this->get_json_decoded_content($code));
 		return $countFollowers;
 	}
@@ -53,7 +54,7 @@ class VkFriendFollowerSearcher
 				.'followers = followers + API.users.getFollowers({"user_id":"'.$this->u_id.'",  "v":"5.2", "count":1000, "offset":(offset+'.$received_followers.')}).items;'
 				.'offset = offset + 1000; } while(offset < 25000 && (offset + '.$received_followers.') < '.$total_followers_count.');'
 				.'return followers ;'; 
-				
+		// <25 000 - The code can contain no more than 25 API method calls, => 25 * 1000 (offset) 		
 		return $code;
 	}
 	
@@ -83,7 +84,7 @@ class VkFriendFollowerSearcher
 			.'var count = friends.count;'		
 			.'friends = friends + API.friends.get({"user_id":"'.$this->u_id.'",  "v":"5.2", "offset":5000}).items;'
 			.'return friends ;';
-			
+		// offset = 5000, The number of friends in VK is limited to 10 000 => 2 requests of 5 000.	
 		return $code;
 	}    
 }
