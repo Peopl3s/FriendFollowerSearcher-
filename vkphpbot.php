@@ -4,21 +4,21 @@ ini_set('max_execution_time', 900);
 
 class VkFriendFollowerSearcher
 {
-    private $token = '*************';
-	private $u_id;
+       private $token = '*************';
+       private $u_id;
 	
-	function  __construct($user_id)
+       function  __construct($user_id)
+       {
+	       $this->u_id = $this->clean_var($user_id);
+       }
+	
+	private function clean_var($var)
 	{
-        $this->u_id = $this->clean_var($user_id);
+		$var = strip_tags($var);
+		$var = preg_replace('~\D+~', '', $var);        
+		$var = trim($var);   
+		return $var;
 	}
-	
-    private function clean_var($var)
-	{
-         $var = strip_tags($var);
-         $var = preg_replace('~\D+~', '', $var);        
-         $var = trim($var);   
-         return $var;
-    }
 	
 	public function get_followers()
 	{
@@ -69,12 +69,12 @@ class VkFriendFollowerSearcher
 		return (!isset($data->error))? $data : '';
 	}
 	
-    public function get_friends() 
+        public function get_friends() 
 	{
 		$code = $this->get_vk_script_code_for_friends();
 		$friends = $this->get_json_decoded_content($code);
-        return $this->get_result($friends);
-    } 
+		return $this->get_result($friends);
+	} 
 	
 	private function get_vk_script_code_for_friends()
 	{	
