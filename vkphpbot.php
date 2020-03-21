@@ -4,14 +4,21 @@ ini_set('max_execution_time', 900);
 
 class VkFriendFollowerSearcher
 {
-	// TODO: Getting a token from an encrypted file on the server
-       private $token = '*************';
+	// TODO: Working with nicknames id or implement the conversion of nicknames id to digital
+       private $token;
        private $u_id;
 	
        function  __construct($user_id)
        {
 	       $this->u_id = $this->clean_var($user_id);
+	       $this->token = $this->getToken();
        }
+	
+	private function getToken($file_name = 'tokenowner.json')
+	{
+		$json_obj = json_decode(file_get_contents($file_name), true);
+		return $json_obj["access_token"];
+	}
 	
 	private function clean_var($var)
 	{
