@@ -14,18 +14,25 @@ class VkFriendFollowerSearcher
 	       $this->token = $this->get_token();
        }
 	
-	private function clean_var($var)
-	{
-		$var = strip_tags($var);
-		$var = preg_replace('~\D+~', '', $var);        
-		$var = trim($var);   
-		return $var;
-	}
-	
 	private function get_token($file_name = 'tokenowner.json')
 	{
 		$json_obj = json_decode(file_get_contents($file_name), true);
 		return $json_obj["access_token"];
+	}
+	
+	private function clean_var($var)
+	{
+		$var = strip_tags($var);    
+         	$var = trim($var);
+         	$var = preg_replace('/(http(s)?:\/\/)?(vk.com\/)?(id\/)?/', '', $var);  		 
+		return $this->get_numeric_id($var); 
+	}
+	
+	private function get_numeric_id($user_id)
+	{
+		$code = 'var id = API.users.get({"user_ids":"'.$user_id.'"})[0]; return id;';
+		$numeric_id = $this->get_json_decoded_content($code);
+		return $numeric_id->id;
 	}
 	
 	public function get_followers()
