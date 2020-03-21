@@ -11,14 +11,8 @@ class VkFriendFollowerSearcher
        function  __construct($user_id)
        {
 	       $this->u_id = $this->clean_var($user_id);
-	       $this->token = $this->getToken();
+	       $this->token = $this->get_token();
        }
-	
-	private function getToken($file_name = 'tokenowner.json')
-	{
-		$json_obj = json_decode(file_get_contents($file_name), true);
-		return $json_obj["access_token"];
-	}
 	
 	private function clean_var($var)
 	{
@@ -26,6 +20,12 @@ class VkFriendFollowerSearcher
 		$var = preg_replace('~\D+~', '', $var);        
 		$var = trim($var);   
 		return $var;
+	}
+	
+	private function get_token($file_name = 'tokenowner.json')
+	{
+		$json_obj = json_decode(file_get_contents($file_name), true);
+		return $json_obj["access_token"];
 	}
 	
 	public function get_followers()
