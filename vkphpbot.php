@@ -10,8 +10,8 @@ class VkFriendFollowerSearcher
 	
        function  __construct($user_id)
        {
-	       $this->u_id = $this->clean_var($user_id);
 	       $this->token = $this->get_token();
+	       $this->u_id = $this->clean_var($user_id);
        }
 	
 	private function get_token($file_name = 'tokenowner.json')
