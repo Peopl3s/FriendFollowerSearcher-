@@ -4,7 +4,7 @@ ini_set('max_execution_time', 900);
 
 class VkFriendFollowerSearcher
 {
-	// TODO: Working with nicknames id or implement the conversion of nicknames id to digital
+	// TODO: Dynamic access token acquisition from the VK API
        private $token;
        private $u_id;
 	
